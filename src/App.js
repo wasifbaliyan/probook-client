@@ -1,5 +1,14 @@
+// import Login from "./pages/Login";
+
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+
 function App() {
-  return <div>Hello, world</div>;
+  return (
+    <Layout>
+      <Home />
+    </Layout>
+  );
 }
 
 export default App;
