@@ -96,7 +96,6 @@ export default function LeftSidebar() {
         <IconButton
           variant="contained"
           color="primary"
-          fullWidth
           style={{
             borderRadius: "28px",
             padding: "10px",

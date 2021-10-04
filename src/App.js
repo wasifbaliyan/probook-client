@@ -1,14 +1,16 @@
 // import Login from "./pages/Login";
 
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import PostDetails from "./pages/PostDetails";
+import Profile from "./pages/Profile";
+// import Home from "./pages/Home";
+// import PostDetails from "./pages/PostDetails";
 
 function App() {
   return (
     <Layout>
       {/* <Home /> */}
-      <PostDetails />
+      {/* <PostDetails /> */}
+      <Profile />
     </Layout>
   );
 }

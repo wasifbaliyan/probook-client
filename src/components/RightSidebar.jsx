@@ -49,7 +49,7 @@ export default function RightSidebar() {
             Who to follow
           </Typography>
           {[1, 2, 3].map((item) => (
-            <WhoToFollow />
+            <WhoToFollow key={item} />
           ))}
         </Box>
       </Box>

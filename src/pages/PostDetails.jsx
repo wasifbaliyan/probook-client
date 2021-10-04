@@ -101,7 +101,7 @@ export default function PostDetails() {
             </IconButton>
           </Box>
           <Box>
-            <Grid container alignItems="center">
+            <Grid container>
               <Grid item>
                 <img src="/logo.png" alt="lgogo" width="60px" />
               </Grid>
