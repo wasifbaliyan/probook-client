@@ -2,11 +2,13 @@
 
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import PostDetails from "./pages/PostDetails";
 
 function App() {
   return (
     <Layout>
-      <Home />
+      {/* <Home /> */}
+      <PostDetails />
     </Layout>
   );
 }
