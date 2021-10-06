@@ -91,7 +91,12 @@ export default function Profile() {
             Software Engineer Devkraft, Frontend Enthusiast! Lorem ipsum, dolor
             sit amet consectetur adipisicing elit. Ad, a!
           </Typography>
-          <Box display="flex" alignItems="center" padding="6px 0">
+          <Box
+            display="flex"
+            alignItems="center"
+            padding="6px 0"
+            flexWrap="wrap"
+          >
             <Box display="flex">
               <LocationOnIcon htmlColor="#555" />
               <Typography sx={{ ml: "6px", color: "#555" }}>India</Typography>
