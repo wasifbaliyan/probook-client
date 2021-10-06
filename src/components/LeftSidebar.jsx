@@ -7,76 +7,205 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { Button, Hidden, IconButton, useTheme } from "@mui/material";
+import {
+  Button,
+  Hidden,
+  IconButton,
+  Menu,
+  MenuItem,
+  useTheme,
+} from "@mui/material";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { logout } from "../redux/authSlice";
+import { useDispatch } from "react-redux";
 
 export default function LeftSidebar() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <Box sx={{ height: "100vh", maxWidth: "100%" }}>
       <Box textAlign="center">
         <img src="/logo.png" alt="logo" width="50px" />
       </Box>
       <List>
-        {[
-          {
-            title: "Home",
-            icon: <HomeIcon fontSize="medium" color="action" />,
-          },
-          {
-            title: "Explore",
-            icon: <TagIcon fontSize="medium" color="action" />,
-          },
-          {
-            title: "Notifications",
-            icon: <NotificationsNoneIcon fontSize="medium" color="action" />,
-          },
-          {
-            title: "Messages",
-            icon: <MailOutlineIcon fontSize="medium" color="action" />,
-          },
-          {
-            title: "Bookmarks",
-            icon: <BookmarkIcon fontSize="medium" color="action" />,
-          },
-          {
-            title: "Lists",
-            icon: <ListAltIcon fontSize="medium" color="action" />,
-          },
-          {
-            title: "Profile",
-            icon: <PersonOutlineIcon fontSize="medium" color="action" />,
-          },
-          {
-            title: "More",
-            icon: <MoreHorizIcon fontSize="medium" color="action" />,
-          },
-        ].map((item, index) => (
-          <ListItem
-            key={index}
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
-                primaryTypographyProps={{
-                  fontSize: "18px",
-                  color: theme.palette.action.active,
-                }}
-                primary={item.title}
-              />
-            </Hidden>
-          </ListItem>
-        ))}
+        <ListItem
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <HomeIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="Home"
+            />
+          </Hidden>
+        </ListItem>
+        <ListItem
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <TagIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="Explore"
+            />
+          </Hidden>
+        </ListItem>
+        <ListItem
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <NotificationsNoneIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="Notifications"
+            />
+          </Hidden>
+        </ListItem>
+        <ListItem
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <MailOutlineIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="Messages"
+            />
+          </Hidden>
+        </ListItem>
+        <ListItem
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <BookmarkIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="Bookmarks"
+            />
+          </Hidden>
+        </ListItem>
+        <ListItem
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <ListAltIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="Lists"
+            />
+          </Hidden>
+        </ListItem>
+        <ListItem
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <PersonOutlineIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="Profile"
+            />
+          </Hidden>
+        </ListItem>
+        <ListItem
+          id="basic-button"
+          aria-controls="basic-menu"
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+          button
+          sx={{
+            borderRadius: "28px",
+            margin: ".5rem 0",
+          }}
+        >
+          <ListItemIcon>
+            <MoreHorizIcon fontSize="medium" color="action" />
+          </ListItemIcon>
+          <Hidden lgDown>
+            <ListItemText
+              primaryTypographyProps={{
+                fontSize: "18px",
+                color: theme.palette.action.active,
+              }}
+              primary="More"
+            />
+          </Hidden>
+        </ListItem>
       </List>
       <Hidden lgDown>
         <Button
@@ -92,19 +221,39 @@ export default function LeftSidebar() {
           Tweet
         </Button>
       </Hidden>
-      <Hidden mdUp>
+      <Hidden lgUp>
         <IconButton
           variant="contained"
           color="primary"
           style={{
             borderRadius: "28px",
-            padding: "10px",
+            padding: "0 15px",
             textTransform: "capitalize",
+            textAlign: "center",
           }}
         >
           <AddCircleOutlineIcon />
         </IconButton>
       </Hidden>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem
+          onClick={() => {
+            dispatch(logout());
+            handleClose();
+          }}
+        >
+          Logout
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }
