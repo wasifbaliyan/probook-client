@@ -5,6 +5,7 @@ const initialState = {
   status: "idle",
   isLoggedIn: false,
   user: {},
+  profile: {},
 };
 
 export const loginUser = createAsyncThunk(
@@ -23,6 +24,11 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const getProfile = createAsyncThunk("auth/getProfile", async (id) => {
+  const { data } = await axios.get("/api/profile/" + id);
+  return data;
+});
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -35,19 +41,23 @@ export const authSlice = createSlice({
       state.isLoggedIn = false;
       axios.defaults.headers.common["authorization"] = null;
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
   extraReducers: {
     [loginUser.pending]: (state, action) => {
       state.status = "loading";
     },
     [loginUser.fulfilled]: (state, action) => {
-      const { token, name, email } = action.payload.response;
+      const { token, name, email, _id } = action.payload.response;
       localStorage.setItem(
         "login",
-        JSON.stringify({ token, email, name, isLoggedIn: true })
+        JSON.stringify({ token, email, _id, name, isLoggedIn: true })
       );
       state.user.name = name;
       state.user.email = email;
+      state.user._id = _id;
       state.status = "success";
       state.isLoggedIn = true;
     },
@@ -73,6 +83,17 @@ export const authSlice = createSlice({
     [registerUser.rejected]: (state, action) => {
       state.status = "failed";
       state.isLoggedIn = false;
+    },
+
+    [getProfile.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [getProfile.fulfilled]: (state, action) => {
+      state.status = "success";
+      state.profile = action.payload.profile;
+    },
+    [getProfile.rejected]: (state, action) => {
+      state.status = "failed";
     },
   },
 });

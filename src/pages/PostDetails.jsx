@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -19,18 +19,32 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import { useHistory, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostDetails } from "../redux/postSlice";
+import { getComments, getPostDetails } from "../redux/postSlice";
+import { addComment } from "../api";
+import Comment from "../components/Comment";
 
 export default function PostDetails() {
+  const [commentText, setCommentText] = useState("");
   const theme = useTheme();
   const { id } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { status, post } = useSelector((state) => state.post);
+  const { status, comments, commentStatus, postDetails } = useSelector(
+    (state) => state.post
+  );
 
   useEffect(() => {
     dispatch(getPostDetails(id));
+    dispatch(getComments(id));
   }, [dispatch, id]);
+
+  const handleAddComment = async () => {
+    const response = await addComment({ id, text: commentText });
+    if (response) {
+      dispatch(getComments(id));
+      setCommentText("");
+    }
+  };
 
   return (
     <Box>
@@ -63,10 +77,10 @@ export default function PostDetails() {
                   <Grid container justifyContent="space-between">
                     <Grid item>
                       <Typography sx={{ fontSize: "16px", fontWeight: "500" }}>
-                        {post.author.name}
+                        {postDetails.author && postDetails.author.name}
                       </Typography>
                       <Typography sx={{ fontSize: "15px", color: "#555" }}>
-                        @{post.author.handle}
+                        @{postDetails.author && postDetails.author.handle}
                       </Typography>
                     </Grid>
                     <Grid item>
@@ -79,7 +93,9 @@ export default function PostDetails() {
               </Grid>
             </Box>
             <Box>
-              <Typography sx={{ fontSize: "20px" }}>{post.text}</Typography>
+              <Typography sx={{ fontSize: "20px" }}>
+                {postDetails.text}
+              </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
@@ -94,7 +110,7 @@ export default function PostDetails() {
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                <strong>{post.likesCount}</strong> Likes
+                <strong>{postDetails.likesCount}</strong> Likes
               </Typography>
             </Box>
             <Box
@@ -110,7 +126,7 @@ export default function PostDetails() {
                 <SyncIcon fontSize="small" />
               </IconButton>
               <IconButton size="small">
-                {post.isLiked ? (
+                {postDetails.isLiked ? (
                   <FavoriteIcon fontSize="small" />
                 ) : (
                   <FavoriteBorderIcon fontSize="small" />
@@ -123,11 +139,13 @@ export default function PostDetails() {
             <Box>
               <Grid container>
                 <Grid item>
-                  <img src="/logo.png" alt="lgogo" width="60px" />
+                  <img src="/logo.png" alt="logo" width="60px" />
                 </Grid>
                 <Grid item flexGrow="1">
                   <Box padding=".5rem 0">
                     <Input
+                      onChange={(e) => setCommentText(e.target.value)}
+                      value={commentText}
                       multiline
                       rows="2"
                       disableUnderline
@@ -138,6 +156,8 @@ export default function PostDetails() {
                   </Box>
                   <Box textAlign="right" paddingBottom=".5rem">
                     <Button
+                      disabled={commentText.length === 0}
+                      onClick={handleAddComment}
                       variant="contained"
                       color="primary"
                       size="small"
@@ -151,14 +171,18 @@ export default function PostDetails() {
                   </Box>
                 </Grid>
               </Grid>
+              <Box textAlign="center" marginTop="1rem">
+                {commentStatus === "loading" && (
+                  <CircularProgress size={20} color="primary" />
+                )}
+              </Box>
+              {commentStatus === "success" &&
+                comments.map((comment) => (
+                  <Comment key={comment._id} comment={comment} />
+                ))}
             </Box>
           </Box>
         )}
-        {/* <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post /> */}
       </Box>
     </Box>
   );

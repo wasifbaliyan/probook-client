@@ -5,6 +5,8 @@ const initialState = {
   status: "idle",
   posts: [],
   postDetails: {},
+  commentStatus: "idle",
+  comments: [],
 };
 
 export const getPosts = createAsyncThunk("post/getPosts", async () => {
@@ -20,10 +22,22 @@ export const getPostDetails = createAsyncThunk(
   }
 );
 
+export const getComments = createAsyncThunk("post/getComments", async (id) => {
+  const { data } = await axios.get("/api/comments/" + id);
+  return data;
+});
+
 export const postSlice = createSlice({
   name: "post",
   initialState,
-  reducers: {},
+  reducers: {
+    updateLike: (state, action) => {
+      const index = state.posts.findIndex(
+        (post) => post._id === action.payload.id
+      );
+      state.posts[index].isLiked = !state.posts[index].isLiked;
+    },
+  },
   extraReducers: {
     [getPosts.pending]: (state, action) => {
       state.status = "loading";
@@ -41,13 +55,24 @@ export const postSlice = createSlice({
     },
     [getPostDetails.fulfilled]: (state, action) => {
       state.status = "success";
-      state.post = action.payload.response.post;
+      state.postDetails = action.payload.response.post;
     },
     [getPostDetails.rejected]: (state, action) => {
       state.status = "failed";
+    },
+
+    [getComments.pending]: (state, action) => {
+      state.commentStatus = "loading";
+    },
+    [getComments.fulfilled]: (state, action) => {
+      state.commentStatus = "success";
+      state.comments = action.payload.response.comments;
+    },
+    [getComments.rejected]: (state, action) => {
+      state.commentStatus = "failed";
     },
   },
 });
 
 export default postSlice.reducer;
-// export const { } = postSlice.actions;
+export const { updateLike } = postSlice.actions;

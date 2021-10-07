@@ -22,11 +22,13 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { logout } from "../redux/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 export default function LeftSidebar() {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const { _id } = JSON.parse(localStorage.getItem("login"));
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -38,29 +40,48 @@ export default function LeftSidebar() {
   return (
     <Box sx={{ height: "100vh", maxWidth: "100%" }}>
       <Box textAlign="center">
-        <img src="/logo.png" alt="logo" width="50px" />
-      </Box>
-      <List>
-        <ListItem
-          button
-          sx={{
-            borderRadius: "28px",
-            margin: ".5rem 0",
+        <NavLink
+          to="/"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            backgroundColor: "inherit",
           }}
         >
-          <ListItemIcon>
-            <HomeIcon fontSize="medium" color="action" />
-          </ListItemIcon>
-          <Hidden lgDown>
-            <ListItemText
-              primaryTypographyProps={{
-                fontSize: "18px",
-                color: theme.palette.action.active,
-              }}
-              primary="Home"
-            />
-          </Hidden>
-        </ListItem>
+          <img src="/logo.png" alt="logo" width="50px" />
+        </NavLink>
+      </Box>
+      <List>
+        <NavLink
+          to="/"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            backgroundColor: "inherit",
+          }}
+        >
+          <ListItem
+            button
+            sx={{
+              borderRadius: "28px",
+              margin: ".5rem 0",
+            }}
+          >
+            <ListItemIcon>
+              <HomeIcon fontSize="medium" color="action" />
+            </ListItemIcon>
+            <Hidden lgDown>
+              <ListItemText
+                primaryTypographyProps={{
+                  fontSize: "18px",
+                  color: theme.palette.action.active,
+                }}
+                primary="Home"
+              />
+            </Hidden>
+          </ListItem>
+        </NavLink>
+
         <ListItem
           button
           sx={{
@@ -161,26 +182,35 @@ export default function LeftSidebar() {
             />
           </Hidden>
         </ListItem>
-        <ListItem
-          button
-          sx={{
-            borderRadius: "28px",
-            margin: ".5rem 0",
+        <NavLink
+          to={`/profile/${_id}`}
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            backgroundColor: "inherit",
           }}
         >
-          <ListItemIcon>
-            <PersonOutlineIcon fontSize="medium" color="action" />
-          </ListItemIcon>
-          <Hidden lgDown>
-            <ListItemText
-              primaryTypographyProps={{
-                fontSize: "18px",
-                color: theme.palette.action.active,
-              }}
-              primary="Profile"
-            />
-          </Hidden>
-        </ListItem>
+          <ListItem
+            button
+            sx={{
+              borderRadius: "28px",
+              margin: ".5rem 0",
+            }}
+          >
+            <ListItemIcon>
+              <PersonOutlineIcon fontSize="medium" color="action" />
+            </ListItemIcon>
+            <Hidden lgDown>
+              <ListItemText
+                primaryTypographyProps={{
+                  fontSize: "18px",
+                  color: theme.palette.action.active,
+                }}
+                primary="Profile"
+              />
+            </Hidden>
+          </ListItem>
+        </NavLink>
         <ListItem
           id="basic-button"
           aria-controls="basic-menu"

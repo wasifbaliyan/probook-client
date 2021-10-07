@@ -9,8 +9,21 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import { parseDate } from "../utils/parseDate";
 import { Link } from "react-router-dom";
+import { likeOrDislikePost } from "../api";
+import { useDispatch } from "react-redux";
+import { updateLike } from "../redux/postSlice";
 
 export default function Post({ post }) {
+  const dispatch = useDispatch();
+
+  const handleLike = async (e) => {
+    e.preventDefault();
+    dispatch(updateLike({ id: post._id }));
+    const response = await likeOrDislikePost({ id: post._id });
+    if (response.message !== "Post updated successfully.") {
+      dispatch(updateLike({ id: post._id }));
+    }
+  };
   return (
     <Link
       to={`/posts/${post._id}`}
@@ -83,7 +96,7 @@ export default function Post({ post }) {
                 <IconButton size="small">
                   <SyncIcon fontSize="small" />
                 </IconButton>
-                <IconButton size="small">
+                <IconButton onClick={handleLike} size="small">
                   {post.isLiked ? (
                     <FavoriteIcon fontSize="small" />
                   ) : (

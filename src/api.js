@@ -8,3 +8,24 @@ export const addPost = async (postData) => {
     alert("Something went wrong.");
   }
 };
+
+export const addComment = async (commentData) => {
+  try {
+    const { data } = await axios.post(
+      "/api/comments/" + commentData.id,
+      commentData
+    );
+    return data;
+  } catch (error) {
+    alert("Something went wrong.");
+  }
+};
+
+export const likeOrDislikePost = async (postData) => {
+  try {
+    const { data } = await axios.post("/api/posts/likes", postData);
+    return data;
+  } catch (error) {
+    alert("Something went wrong.");
+  }
+};
