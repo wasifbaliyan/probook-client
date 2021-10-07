@@ -10,10 +10,10 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import { parseDate } from "../utils/parseDate";
 import { Link } from "react-router-dom";
 
-export default function Post({ post }) {
+export default function Comment({ comment }) {
   return (
     <Link
-      to={`/posts/${post._id}`}
+      to={`/posts/123`}
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <Box
@@ -41,12 +41,12 @@ export default function Post({ post }) {
                     <Typography
                       sx={{ fontSize: "16px", fontWeight: 500, mr: "6px" }}
                     >
-                      {post.author.name}
+                      {comment.author.name}
                     </Typography>
                     <Typography
                       sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
                     >
-                      @{post.author.handle}
+                      @{comment.author.handle}
                     </Typography>
                     <Typography
                       sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
@@ -56,12 +56,12 @@ export default function Post({ post }) {
                     <Typography
                       sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
                     >
-                      {parseDate(post.createdAt)}
+                      {parseDate(comment.createdAt)}
                     </Typography>
                   </Box>
                   <Box>
                     <Typography sx={{ fontSize: "15px", color: "#555" }}>
-                      {post.text}
+                      {comment.text}
                     </Typography>
                   </Box>
                 </Grid>
@@ -84,7 +84,7 @@ export default function Post({ post }) {
                   <SyncIcon fontSize="small" />
                 </IconButton>
                 <IconButton size="small">
-                  {post.isLiked ? (
+                  {comment.isLiked ? (
                     <FavoriteIcon fontSize="small" />
                   ) : (
                     <FavoriteBorderIcon fontSize="small" />
