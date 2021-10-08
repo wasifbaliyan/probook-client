@@ -29,3 +29,12 @@ export const likeOrDislikePost = async (postData) => {
     alert("Something went wrong.");
   }
 };
+
+export const deletePost = async (postData) => {
+  try {
+    const { data } = await axios.delete(`/api/posts/${postData.id}`);
+    return data;
+  } catch (error) {
+    alert("Something went wrong.");
+  }
+};

@@ -41,12 +41,17 @@ export default function Profile() {
               </IconButton>
             </RouteLink>
           </Grid>
-          <Grid item>
-            <Typography variant="h6">Wasif Baliyan</Typography>
-            <Typography sx={{ fontSize: "12px", color: "#555" }}>
-              420 Posts
-            </Typography>
-          </Grid>
+
+          {status === "success" && (
+            <Grid item>
+              <Typography variant="h6">
+                {profile.userId && profile.userId && profile.userId.name}
+              </Typography>
+              <Typography sx={{ fontSize: "12px", color: "#555" }}>
+                {profile.posts.length} posts
+              </Typography>{" "}
+            </Grid>
+          )}
         </Grid>
       </Box>
       <Box textAlign="center">
@@ -97,10 +102,10 @@ export default function Profile() {
           </Box>
           <Box padding="10px 20px">
             <Typography variant="h6" sx={{ fontWeight: "500" }}>
-              {profile.userId.name}
+              {profile.userId && profile.userId.name}
             </Typography>
             <Typography sx={{ fontSize: "14px", color: "#555" }}>
-              @{profile.userId.handle}
+              @{profile.userId && profile.userId.handle}
             </Typography>
             <Typography fontSize="16px" color="#333" padding="10px 0">
               {profile.bio}
@@ -156,7 +161,7 @@ export default function Profile() {
             </Typography>
           </Box>
           {profile.posts.map((post) => (
-            <Post key={post._id} post={post} />
+            <Post key={post._id} post={post} profile={true} />
           ))}
         </Box>
       )}

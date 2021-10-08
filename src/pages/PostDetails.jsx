@@ -4,6 +4,8 @@ import {
   Grid,
   IconButton,
   Input,
+  Menu,
+  MenuItem,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -20,7 +22,7 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import { useHistory, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getComments, getPostDetails } from "../redux/postSlice";
-import { addComment } from "../api";
+import { addComment, deletePost, likeOrDislikePost } from "../api";
 import Comment from "../components/Comment";
 
 export default function PostDetails() {
@@ -32,6 +34,31 @@ export default function PostDetails() {
   const { status, comments, commentStatus, postDetails } = useSelector(
     (state) => state.post
   );
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const { _id } = JSON.parse(localStorage.getItem("login"));
+  const handleDeletePost = async () => {
+    const response = await deletePost({ id: postDetails._id });
+    if (response) {
+      history.push("/");
+    }
+  };
+
+  const handleLike = async (e) => {
+    e.preventDefault();
+    const response = await likeOrDislikePost({ id: postDetails._id });
+    if (response) {
+      dispatch(getPostDetails(id));
+      dispatch(getComments(id));
+    }
+  };
 
   useEffect(() => {
     dispatch(getPostDetails(id));
@@ -84,9 +111,38 @@ export default function PostDetails() {
                       </Typography>
                     </Grid>
                     <Grid item>
-                      <IconButton>
-                        <MoreHorizIcon />
-                      </IconButton>
+                      {status === "success" &&
+                        postDetails.author &&
+                        _id === postDetails.author._id && (
+                          <IconButton
+                            aria-expanded={open ? "true" : undefined}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleClick(e);
+                            }}
+                          >
+                            <MoreHorizIcon />
+                          </IconButton>
+                        )}
+
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeletePost();
+                          }}
+                        >
+                          Delete Post
+                        </MenuItem>
+                      </Menu>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -110,7 +166,8 @@ export default function PostDetails() {
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                <strong>{postDetails.likesCount}</strong> Likes
+                <strong>{postDetails.likes && postDetails.likes.length}</strong>{" "}
+                Likes
               </Typography>
             </Box>
             <Box
@@ -125,7 +182,7 @@ export default function PostDetails() {
               <IconButton size="small">
                 <SyncIcon fontSize="small" />
               </IconButton>
-              <IconButton size="small">
+              <IconButton onClick={handleLike} size="small">
                 {postDetails.isLiked ? (
                   <FavoriteIcon fontSize="small" />
                 ) : (
