@@ -1,10 +1,21 @@
 import { Search } from "@mui/icons-material";
 import { Input, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsers } from "../redux/authSlice";
 import WhoToFollow from "./WhoToFollow";
 
 export default function RightSidebar() {
+  const dispatch = useDispatch();
+  const { _id } = JSON.parse(localStorage.getItem("login"));
+
+  const { users, userStatus } = useSelector((state) => state.auth);
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
+
+  console.log(users);
   return (
     <Box sx={{ height: "100vh" }}>
       <Box paddingTop="10px">
@@ -48,9 +59,10 @@ export default function RightSidebar() {
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             Who to follow
           </Typography>
-          {[1, 2, 3].map((item) => (
-            <WhoToFollow key={item} />
-          ))}
+          {userStatus === "success" &&
+            users
+              .filter((user) => user._id !== _id)
+              .map((item) => <WhoToFollow key={item} user={item} />)}
         </Box>
       </Box>
     </Box>

@@ -273,7 +273,7 @@ export default function LeftSidebar() {
               textTransform: "capitalize",
             }}
           >
-            Tweet
+            Post
           </Button>
         </Hidden>
         <Hidden lgUp>
@@ -314,7 +314,7 @@ export default function LeftSidebar() {
         <Modal
           open={openModal}
           handleClose={handleModalClose}
-          saveText={"Tweet"}
+          saveText={"Post"}
           len={postText.length}
           handleSave={handleAddPost}
         >

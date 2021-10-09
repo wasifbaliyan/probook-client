@@ -6,6 +6,8 @@ const initialState = {
   isLoggedIn: false,
   user: {},
   profile: {},
+  userStatus: "idle",
+  users: [],
 };
 
 export const loginUser = createAsyncThunk(
@@ -26,6 +28,11 @@ export const registerUser = createAsyncThunk(
 
 export const getProfile = createAsyncThunk("auth/getProfile", async (id) => {
   const { data } = await axios.get("/api/profile/" + id);
+  return data;
+});
+
+export const getUsers = createAsyncThunk("auth/getUsers", async () => {
+  const { data } = await axios.get("/auth/users/");
   return data;
 });
 
@@ -94,6 +101,17 @@ export const authSlice = createSlice({
     },
     [getProfile.rejected]: (state, action) => {
       state.status = "failed";
+    },
+
+    [getUsers.pending]: (state, action) => {
+      state.userStatus = "loading";
+    },
+    [getUsers.fulfilled]: (state, action) => {
+      state.userStatus = "success";
+      state.users = action.payload.response.users;
+    },
+    [getUsers.rejected]: (state, action) => {
+      state.userStatus = "failed";
     },
   },
 });

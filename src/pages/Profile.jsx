@@ -20,16 +20,58 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getProfile } from "../redux/authSlice";
 import { Link as RouteLink } from "react-router-dom";
+import { getFollowers, getFollowings } from "../redux/followSlice";
+import { followAccount, followingAccount } from "../api";
 
 export default function Profile() {
   const theme = useTheme();
   const { id } = useParams();
   const dispatch = useDispatch();
   const { profile, status } = useSelector((state) => state.auth);
+  const { followingStatus, followerStatus, followers, followings } =
+    useSelector((state) => state.follow);
+  const { _id } = JSON.parse(localStorage.getItem("login"));
 
   useEffect(() => {
     dispatch(getProfile(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (profile.userId) {
+      dispatch(getFollowers(profile.userId._id));
+      dispatch(getFollowings(profile.userId._id));
+    }
+  }, [dispatch, profile.userId]);
+
+  const handleFollow = async () => {
+    const responseFollow = await followAccount({
+      userId: profile.userId._id,
+      followerId: _id,
+    });
+    const responseFlwing = await followingAccount({
+      followingId: profile.userId._id,
+      userId: _id,
+    });
+    if (responseFollow) {
+      dispatch(getFollowers(id));
+    }
+    if (responseFlwing) {
+      dispatch(getFollowings(id));
+    }
+  };
+
+  function hideFollow() {
+    if (profile.userId) {
+      if (followings.length !== 0) {
+        return (
+          followings[0].followingId.includes(_id) || _id === profile.userId._id
+        );
+      }
+    }
+  }
+
+  console.log(!hideFollow());
+
   return (
     <Box>
       <Box borderBottom="1px solid #ccc" padding="8px 20px">
@@ -48,7 +90,7 @@ export default function Profile() {
                 {profile.userId && profile.userId && profile.userId.name}
               </Typography>
               <Typography sx={{ fontSize: "12px", color: "#555" }}>
-                {profile.posts.length} posts
+                {profile.posts && profile.posts.length} posts
               </Typography>{" "}
             </Grid>
           )}
@@ -84,21 +126,24 @@ export default function Profile() {
             <IconButton>
               <MailOutlineIcon />
             </IconButton>
-            <Button
-              size="small"
-              sx={{
-                borderRadius: theme.shape.borderRadius,
-                textTransform: "capitalize",
-                padding: "6px 20px",
-                background: "black",
-                "&:hover": {
-                  background: "#333",
-                },
-              }}
-              variant="contained"
-            >
-              Follow
-            </Button>
+            {!hideFollow() && (
+              <Button
+                onClick={handleFollow}
+                size="small"
+                sx={{
+                  borderRadius: theme.shape.borderRadius,
+                  textTransform: "capitalize",
+                  padding: "6px 20px",
+                  background: "black",
+                  "&:hover": {
+                    background: "#333",
+                  },
+                }}
+                variant="contained"
+              >
+                Follow
+              </Button>
+            )}
           </Box>
           <Box padding="10px 20px">
             <Typography variant="h6" sx={{ fontWeight: "500" }}>
@@ -140,10 +185,20 @@ export default function Profile() {
             </Box>
             <Box display="flex">
               <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black" }}>400</strong> Following
+                <strong style={{ color: "black" }}>
+                  {followingStatus === "success" &&
+                    followings.length !== 0 &&
+                    followings[0].followingId.length}
+                </strong>
+                Following
               </Typography>
               <Typography color="#555" marginRight="1rem">
-                <strong style={{ color: "black" }}>8990</strong> Followers
+                <strong style={{ color: "black" }}>
+                  {followerStatus === "success" &&
+                    followers.length !== 0 &&
+                    followers[0].followerId.length}
+                </strong>
+                Followers
               </Typography>
             </Box>
           </Box>
@@ -160,9 +215,10 @@ export default function Profile() {
               Posts
             </Typography>
           </Box>
-          {profile.posts.map((post) => (
-            <Post key={post._id} post={post} profile={true} />
-          ))}
+          {profile.posts &&
+            profile.posts.map((post) => (
+              <Post key={post._id} post={post} profile={true} />
+            ))}
         </Box>
       )}
     </Box>

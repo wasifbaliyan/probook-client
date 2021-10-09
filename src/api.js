@@ -38,3 +38,21 @@ export const deletePost = async (postData) => {
     alert("Something went wrong.");
   }
 };
+
+export const followAccount = async (follow) => {
+  try {
+    const { data } = await axios.post("/api/followers", follow);
+    return data;
+  } catch (error) {
+    alert("Something went wrong.");
+  }
+};
+
+export const followingAccount = async (follow) => {
+  try {
+    const { data } = await axios.post("/api/followings", follow);
+    return data;
+  } catch (error) {
+    alert("Something went wrong.");
+  }
+};
