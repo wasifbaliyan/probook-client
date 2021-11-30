@@ -7,6 +7,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import React, { useState } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -14,7 +15,6 @@ import SyncIcon from "@mui/icons-material/Sync";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import IosShareIcon from "@mui/icons-material/IosShare";
-import { parseDate } from "../utils/parseDate";
 import { Link } from "react-router-dom";
 import { addComment, deletePost, likeOrDislikePost } from "../api";
 import { useDispatch } from "react-redux";
@@ -117,7 +117,7 @@ export default function Post({ post, profile }) {
                       <Typography
                         sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
                       >
-                        {parseDate(post.createdAt)}
+                        {formatDistanceToNow(new Date(post.createdAt))}
                       </Typography>
                     </Box>
                     <Box>

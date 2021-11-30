@@ -9,6 +9,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import format from "date-fns/format";
+
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -155,13 +157,17 @@ export default function PostDetails() {
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                12:21 AM
+                {postDetails &&
+                  postDetails.createdAt &&
+                  format(new Date(postDetails.createdAt), "HH:mm a")}
               </Typography>
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
                 .
               </Typography>
               <Typography sx={{ fontSize: "14px", mr: "6px", color: "#555" }}>
-                Oct 05, 2021
+                {postDetails &&
+                  postDetails.createdAt &&
+                  format(new Date(postDetails.createdAt), "MMM dd yyyy")}
               </Typography>
             </Box>
             <Box display="flex" padding="1rem 0" borderBottom="1px solid #ccc">

@@ -15,7 +15,6 @@ export default function RightSidebar() {
     dispatch(getUsers());
   }, [dispatch]);
 
-  console.log(users);
   return (
     <Box sx={{ height: "100%" }}>
       <Box paddingTop="10px">

@@ -22,6 +22,7 @@ import { getProfile } from "../redux/authSlice";
 import { Link as RouteLink } from "react-router-dom";
 import { getFollowers, getFollowings } from "../redux/followSlice";
 import { followAccount, followingAccount } from "../api";
+import format from "date-fns/format";
 
 export default function Profile() {
   const theme = useTheme();
@@ -69,8 +70,6 @@ export default function Profile() {
       }
     }
   }
-
-  console.log(!hideFollow());
 
   return (
     <Box>
@@ -179,7 +178,10 @@ export default function Profile() {
               <Box display="flex" marginLeft="1rem">
                 <DateRangeIcon htmlColor="#555" />
                 <Typography sx={{ ml: "6px", color: "#555" }}>
-                  Jan, 2019
+                  {profile.userId &&
+                    profile.userId &&
+                    profile.userId.createdAt &&
+                    format(new Date(profile.userId.createdAt), "MMM dd yyyy")}
                 </Typography>
               </Box>
             </Box>
