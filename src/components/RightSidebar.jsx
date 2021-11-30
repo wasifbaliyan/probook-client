@@ -17,7 +17,7 @@ export default function RightSidebar() {
 
   console.log(users);
   return (
-    <Box sx={{ height: "100vh" }}>
+    <Box sx={{ height: "100%" }}>
       <Box paddingTop="10px">
         <Box
           width="100%"
@@ -62,6 +62,7 @@ export default function RightSidebar() {
           {userStatus === "success" &&
             users
               .filter((user) => user._id !== _id)
+              .slice(0, 7)
               .map((item) => <WhoToFollow key={item} user={item} />)}
         </Box>
       </Box>

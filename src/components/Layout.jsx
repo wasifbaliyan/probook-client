@@ -33,7 +33,7 @@ export default function Layout({ children }) {
               </Box>
             </Grid>
             <Hidden lgDown>
-              <Grid item lg={4}>
+              <Grid item lg={4} sx={{ height: "100vh" }}>
                 <RightSidebar />
               </Grid>
             </Hidden>
