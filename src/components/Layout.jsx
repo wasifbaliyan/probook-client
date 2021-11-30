@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LeftSidebar from "./LeftSidebar";
 import RightSidebar from "./RightSidebar";
 import Box from "@mui/material/Box";
 import { Grid, Hidden } from "@mui/material";
 import { useTheme } from "@mui/system";
+import { getUsers } from "../redux/authSlice";
+import { useDispatch } from "react-redux";
 
 export default function Layout({ children }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
   return (
     <Box
       sx={{
@@ -33,7 +39,7 @@ export default function Layout({ children }) {
               </Box>
             </Grid>
             <Hidden lgDown>
-              <Grid item lg={4}>
+              <Grid item lg={4} sx={{ height: "100vh" }}>
                 <RightSidebar />
               </Grid>
             </Hidden>
