@@ -1,5 +1,5 @@
 import { Search } from "@mui/icons-material";
-import { Input, Typography, Grid } from "@mui/material";
+import { Input, Typography, Grid, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -135,6 +135,11 @@ export default function RightSidebar() {
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             Who to follow
           </Typography>
+          <Box textAlign="center" marginTop="1rem">
+            {userStatus === "loading" && (
+              <CircularProgress size={20} color="primary" />
+            )}
+          </Box>
           {userStatus === "success" &&
             users
               .filter((user) => user._id !== _id)
