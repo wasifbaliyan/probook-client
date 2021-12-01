@@ -96,7 +96,11 @@ export default function Profile() {
         </Grid>
       </Box>
       <Box textAlign="center">
-        {status === "loading" && <CircularProgress size={20} color="primary" />}
+        {status === "loading" && (
+          <Box marginTop="1rem">
+            <CircularProgress size={20} color="primary" />
+          </Box>
+        )}
       </Box>
       {status === "success" && (
         <Box height="90vh" sx={{ overflowY: "scroll" }}>
