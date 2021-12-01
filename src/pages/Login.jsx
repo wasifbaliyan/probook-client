@@ -39,12 +39,22 @@ export default function Login() {
         {isLoginForm ? (
           <Box textAlign="center" margin=".5rem 0">
             Don't have an account?{" "}
-            <Link onClick={() => setIsLoginForm(false)}>Create one</Link>
+            <Link
+              style={{ textDecoration: "none", cursor: "pointer" }}
+              onClick={() => setIsLoginForm(false)}
+            >
+              Create one
+            </Link>
           </Box>
         ) : (
           <Box textAlign="center" margin=".5rem 0">
             Already registered?{" "}
-            <Link onClick={() => setIsLoginForm(true)}>Sign in</Link>
+            <Link
+              style={{ textDecoration: "none", cursor: "pointer" }}
+              onClick={() => setIsLoginForm(true)}
+            >
+              Sign in
+            </Link>
           </Box>
         )}
       </Box>

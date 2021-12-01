@@ -5,7 +5,7 @@ import { useHistory } from "react-router";
 import { loginUser } from "../redux/authSlice";
 
 export default function LoginForm() {
-  const [loginData, setLoginData] = useState({});
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const history = useHistory();
   const { status, isLoggedIn } = useSelector((state) => state.auth);
@@ -55,6 +55,10 @@ export default function LoginForm() {
           name="password"
         />
         <Button
+          disabled={
+            loginData.email.trimStart().length === 0 ||
+            loginData.password.trimStart().length === 0
+          }
           sx={{
             width: "100%",
             margin: "1.5rem 0",

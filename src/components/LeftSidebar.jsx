@@ -25,7 +25,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { logout } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Modal from "./Modal";
 import { getPosts } from "../redux/postSlice";
 import { addPost } from "../api";
@@ -64,7 +64,7 @@ export default function LeftSidebar() {
     <>
       <Box sx={{ height: "100vh", maxWidth: "100%" }}>
         <Box textAlign="center">
-          <NavLink
+          <Link
             to="/"
             style={{
               textDecoration: "none",
@@ -73,7 +73,7 @@ export default function LeftSidebar() {
             }}
           >
             <img src="/logo.png" alt="logo" width="50px" />
-          </NavLink>
+          </Link>
         </Box>
         <List>
           <NavLink
