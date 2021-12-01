@@ -315,7 +315,7 @@ export default function LeftSidebar() {
           open={openModal}
           handleClose={handleModalClose}
           saveText={"Post"}
-          len={postText.length}
+          len={postText.trimStart().length}
           handleSave={handleAddPost}
         >
           <Box>

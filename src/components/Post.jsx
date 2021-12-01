@@ -197,7 +197,7 @@ export default function Post({ post, profile }) {
           open={openModal}
           handleClose={handleModalClose}
           saveText={"Comment"}
-          len={commentText.length}
+          len={commentText.trimStart().length}
           handleSave={handleAddComment}
         >
           <Box>
