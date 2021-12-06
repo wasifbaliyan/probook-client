@@ -21,7 +21,12 @@ import { useParams } from "react-router";
 import { getProfile } from "../redux/authSlice";
 import { Link as RouteLink } from "react-router-dom";
 import { getFollowers, getFollowings } from "../redux/followSlice";
-import { followAccount, followingAccount } from "../api";
+import {
+  followAccount,
+  followingAccount,
+  unfollowAccount,
+  unfollowingAccount,
+} from "../api";
 import format from "date-fns/format";
 
 export default function Profile() {
@@ -61,13 +66,36 @@ export default function Profile() {
     }
   };
 
+  const handleUnfollow = async () => {
+    const responseFollow = await unfollowAccount({
+      id: _id,
+      userId: profile.userId._id,
+    });
+    const responseFlwing = await unfollowingAccount({
+      id: profile.userId._id,
+      userId: _id,
+    });
+    if (responseFollow) {
+      dispatch(getFollowers(id));
+    }
+    if (responseFlwing) {
+      dispatch(getFollowings(id));
+    }
+  };
+
   function hideFollow() {
     if (profile.userId) {
-      if (followings.length !== 0) {
-        return (
-          followings[0].followingId.includes(_id) || _id === profile.userId._id
-        );
-      }
+      return _id === profile.userId._id;
+    }
+  }
+
+  function isFollowVisible() {
+    if (followers) {
+      const index = followers.findIndex(
+        (follower) => follower.followerId === _id
+      );
+      if (index === -1) return true;
+      return false;
     }
   }
 
@@ -129,7 +157,7 @@ export default function Profile() {
             <IconButton>
               <MailOutlineIcon />
             </IconButton>
-            {!hideFollow() && (
+            {!hideFollow() && isFollowVisible() && (
               <Button
                 onClick={handleFollow}
                 size="small"
@@ -145,6 +173,25 @@ export default function Profile() {
                 variant="contained"
               >
                 Follow
+              </Button>
+            )}
+
+            {!hideFollow() && !isFollowVisible() && (
+              <Button
+                onClick={handleUnfollow}
+                size="small"
+                sx={{
+                  borderRadius: theme.shape.borderRadius,
+                  textTransform: "capitalize",
+                  padding: "6px 20px",
+                  background: "black",
+                  "&:hover": {
+                    background: "#333",
+                  },
+                }}
+                variant="contained"
+              >
+                Unfollow
               </Button>
             )}
           </Box>
@@ -192,17 +239,13 @@ export default function Profile() {
             <Box display="flex">
               <Typography color="#555" marginRight="1rem">
                 <strong style={{ color: "black" }}>
-                  {followingStatus === "success" &&
-                    followings.length !== 0 &&
-                    followings[0].followingId.length}
+                  {followingStatus === "success" && followings.length}
                 </strong>
                 Following
               </Typography>
               <Typography color="#555" marginRight="1rem">
                 <strong style={{ color: "black" }}>
-                  {followerStatus === "success" &&
-                    followers.length !== 0 &&
-                    followers[0].followerId.length}
+                  {followerStatus === "success" && followers.length}
                 </strong>
                 Followers
               </Typography>

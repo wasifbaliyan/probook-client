@@ -2,17 +2,42 @@ import { Typography, useTheme } from "@mui/material";
 import { Button, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { followAccount, followingAccount } from "../api";
+import { getFollowers, getFollowings } from "../redux/followSlice";
 
 export default function WhoToFollow({ user }) {
   const theme = useTheme();
+  const { _id } = JSON.parse(localStorage.getItem("login"));
+  const dispatch = useDispatch();
+
+  const handleFollow = async () => {
+    const responseFollow = await followAccount({
+      userId: user._id,
+      followerId: _id,
+    });
+    const responseFlwing = await followingAccount({
+      followingId: user._id,
+      userId: _id,
+    });
+    if (responseFollow) {
+      dispatch(getFollowers(_id));
+    }
+    if (responseFlwing) {
+      dispatch(getFollowings(_id));
+    }
+  };
   return (
     <Box margin="1rem 0">
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item>
           <Grid container>
-            <Grid item sx={{ paddingRight: "12px" }}>
-              <img src="/logo.png" width="50px" alt="logo" />
-            </Grid>
+            <Link to={`/profile/${user._id}`}>
+              <Grid item sx={{ paddingRight: "12px" }}>
+                <img src="/logo.png" width="50px" alt="logo" />
+              </Grid>
+            </Link>
             <Grid item>
               <Grid container alignItems="center">
                 <Grid item>
@@ -25,7 +50,7 @@ export default function WhoToFollow({ user }) {
                     >
                       {user.handle}
                     </Typography>
-                    <Typography
+                    {/* <Typography
                       sx={{
                         fontSize: "12px",
                         background: "#ccc",
@@ -35,7 +60,7 @@ export default function WhoToFollow({ user }) {
                       }}
                     >
                       follows you
-                    </Typography>
+                    </Typography> */}
                   </Box>
                 </Grid>
               </Grid>
@@ -44,6 +69,7 @@ export default function WhoToFollow({ user }) {
         </Grid>
         <Grid item>
           <Button
+            onClick={handleFollow}
             size="small"
             sx={{
               borderRadius: theme.shape.borderRadius,

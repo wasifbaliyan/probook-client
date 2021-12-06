@@ -27,6 +27,7 @@ import { addPost } from "../api";
 
 export default function LeftSidebar() {
   const theme = useTheme();
+
   const dispatch = useDispatch();
   const { _id } = JSON.parse(localStorage.getItem("login"));
 

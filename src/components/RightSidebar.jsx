@@ -1,23 +1,42 @@
 import { Search } from "@mui/icons-material";
 import { Input, Typography, Grid, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import WhoToFollow from "./WhoToFollow";
 import { Link } from "react-router-dom";
+import { getFollowings } from "../redux/followSlice";
 
 export default function RightSidebar() {
   const [query, setQuery] = React.useState("");
   const { _id } = JSON.parse(localStorage.getItem("login"));
-
+  const dispatch = useDispatch();
   const { users, userStatus } = useSelector((state) => state.auth);
-
+  const { followingStatus, followings } = useSelector((state) => state.follow);
   function queriedUsers() {
     return users.filter(
       (user) =>
         user.name.toLowerCase().includes(query.toLowerCase()) ||
         user.handle.toLowerCase().includes(query.toLowerCase())
     );
+  }
+
+  useEffect(() => {
+    dispatch(getFollowings(_id));
+  }, [dispatch, _id]);
+
+  function showToFollow() {
+    const filtered = users.filter((user) => user._id !== _id);
+
+    return filtered.filter((item) => {
+      const index = followings.findIndex(
+        (follow) => follow.followingId === item._id
+      );
+      if (index !== -1) {
+        return false;
+      }
+      return true;
+    });
   }
 
   return (
@@ -136,15 +155,14 @@ export default function RightSidebar() {
             Who to follow
           </Typography>
           <Box textAlign="center" marginTop="1rem">
-            {userStatus === "loading" && (
+            {(userStatus === "loading" || followingStatus === "loading") && (
               <CircularProgress size={20} color="primary" />
             )}
           </Box>
           {userStatus === "success" &&
-            users
-              .filter((user) => user._id !== _id)
+            showToFollow()
               .slice(0, 7)
-              .map((item) => <WhoToFollow key={item} user={item} />)}
+              .map((item) => <WhoToFollow key={item._id} user={item} />)}
         </Box>
       </Box>
     </Box>

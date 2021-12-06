@@ -56,3 +56,25 @@ export const followingAccount = async (follow) => {
     alert("Something went wrong.");
   }
 };
+
+export const unfollowAccount = async (follow) => {
+  try {
+    const { data } = await axios.delete(
+      "/api/followers/" + follow.id + "?userId=" + follow.userId
+    );
+    return data;
+  } catch (error) {
+    alert("Something went wrong.");
+  }
+};
+
+export const unfollowingAccount = async (follow) => {
+  try {
+    const { data } = await axios.delete(
+      "/api/followings?followingId=" + follow.id + "&userId=" + follow.userId
+    );
+    return data;
+  } catch (error) {
+    alert("Something went wrong.");
+  }
+};
