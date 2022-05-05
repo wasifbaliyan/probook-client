@@ -43,7 +43,7 @@ export default function AddPost() {
           >
             <Button
               onClick={handleAddPost}
-              disabled={postText.length === 0}
+              disabled={postText.trimStart().length === 0}
               variant="contained"
               color="primary"
               sx={{

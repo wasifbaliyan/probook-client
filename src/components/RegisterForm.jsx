@@ -5,7 +5,12 @@ import { useHistory } from "react-router";
 import { registerUser } from "../redux/authSlice";
 
 export default function RegisterForm() {
-  const [registerData, setRegisterData] = useState({});
+  const [registerData, setRegisterData] = useState({
+    name: "",
+    handle: "",
+    email: "",
+    password: "",
+  });
   const dispatch = useDispatch();
   const history = useHistory();
   const { status, isLoggedIn } = useSelector((state) => state.auth);
@@ -79,6 +84,12 @@ export default function RegisterForm() {
         required
       />
       <Button
+        disabled={
+          registerData.email.trimStart().length === 0 ||
+          registerData.password.trimStart().length === 0 ||
+          registerData.handle.trimStart().length === 0 ||
+          registerData.name.trimStart().length === 0
+        }
         type="submit"
         sx={{
           width: "100%",

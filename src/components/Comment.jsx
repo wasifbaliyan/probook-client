@@ -2,7 +2,7 @@ import { Grid, IconButton, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { parseDate } from "../utils/parseDate";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 export default function Comment({ comment }) {
   return (
@@ -46,7 +46,7 @@ export default function Comment({ comment }) {
                   <Typography
                     sx={{ fontSize: "15px", mr: "6px", color: "#555" }}
                   >
-                    {parseDate(comment.createdAt)}
+                    {formatDistanceToNow(new Date(comment.createdAt))}{" "}
                   </Typography>
                 </Box>
                 <Box>
@@ -61,29 +61,6 @@ export default function Comment({ comment }) {
                 </IconButton>
               </Grid>
             </Grid>
-            {/* <Box
-                display="flex"
-                justifyContent="space-between"
-                marginRight="5rem"
-                marginTop=".8rem"
-              >
-                <IconButton size="small">
-                  <ChatBubbleOutlineIcon fontSize="small" />
-                </IconButton>
-                <IconButton size="small">
-                  <SyncIcon fontSize="small" />
-                </IconButton>
-                <IconButton size="small">
-                  {comment.isLiked ? (
-                    <FavoriteIcon fontSize="small" />
-                  ) : (
-                    <FavoriteBorderIcon fontSize="small" />
-                  )}
-                </IconButton>
-                <IconButton size="small">
-                  <IosShareIcon fontSize="small" />
-                </IconButton>
-              </Box> */}
           </Box>
         </Grid>
       </Grid>

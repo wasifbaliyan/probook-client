@@ -50,7 +50,10 @@ export default function Post({ post, profile }) {
     }
   };
 
-  const handleDeletePost = async () => {
+  const handleDeletePost = async (e) => {
+    e.stopPropagation();
+    const confirmation = window.confirm("Are you sure to delete this post?");
+    if (!confirmation) return;
     const response = await deletePost({ id: post._id });
     if (response) {
       if (profile) {
@@ -143,16 +146,12 @@ export default function Post({ post, profile }) {
                       anchorEl={anchorEl}
                       open={open}
                       onClose={handleClose}
+                      onClick={(e) => e.stopPropagation()}
                       MenuListProps={{
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDeletePost();
-                        }}
-                      >
+                      <MenuItem onClick={(e) => handleDeletePost(e)}>
                         Delete Post
                       </MenuItem>
                     </Menu>
@@ -197,7 +196,7 @@ export default function Post({ post, profile }) {
           open={openModal}
           handleClose={handleModalClose}
           saveText={"Comment"}
-          len={commentText.length}
+          len={commentText.trimStart().length}
           handleSave={handleAddComment}
         >
           <Box>

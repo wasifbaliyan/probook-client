@@ -5,43 +5,32 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
-import TagIcon from "@mui/icons-material/Tag";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import {
   Button,
   Grid,
   Hidden,
   IconButton,
   Input,
-  Menu,
-  MenuItem,
   useTheme,
 } from "@mui/material";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import ListAltIcon from "@mui/icons-material/ListAlt";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import LogoutIcon from "@mui/icons-material/Logout";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { logout } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Modal from "./Modal";
 import { getPosts } from "../redux/postSlice";
 import { addPost } from "../api";
 
 export default function LeftSidebar() {
   const theme = useTheme();
+
   const dispatch = useDispatch();
   const { _id } = JSON.parse(localStorage.getItem("login"));
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const [openModal, setOpenModal] = React.useState(false);
   const handleModalClose = () => {
     setOpenModal(false);
@@ -64,7 +53,7 @@ export default function LeftSidebar() {
     <>
       <Box sx={{ height: "100vh", maxWidth: "100%" }}>
         <Box textAlign="center">
-          <NavLink
+          <Link
             to="/"
             style={{
               textDecoration: "none",
@@ -73,7 +62,7 @@ export default function LeftSidebar() {
             }}
           >
             <img src="/logo.png" alt="logo" width="50px" />
-          </NavLink>
+          </Link>
         </Box>
         <List>
           <NavLink
@@ -105,67 +94,6 @@ export default function LeftSidebar() {
               </Hidden>
             </ListItem>
           </NavLink>
-
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>
-              <TagIcon fontSize="medium" color="action" />
-            </ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
-                primaryTypographyProps={{
-                  fontSize: "18px",
-                  color: theme.palette.action.active,
-                }}
-                primary="Explore"
-              />
-            </Hidden>
-          </ListItem>
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>
-              <NotificationsNoneIcon fontSize="medium" color="action" />
-            </ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
-                primaryTypographyProps={{
-                  fontSize: "18px",
-                  color: theme.palette.action.active,
-                }}
-                primary="Notifications"
-              />
-            </Hidden>
-          </ListItem>
-          <ListItem
-            button
-            sx={{
-              borderRadius: "28px",
-              margin: ".5rem 0",
-            }}
-          >
-            <ListItemIcon>
-              <MailOutlineIcon fontSize="medium" color="action" />
-            </ListItemIcon>
-            <Hidden lgDown>
-              <ListItemText
-                primaryTypographyProps={{
-                  fontSize: "18px",
-                  color: theme.palette.action.active,
-                }}
-                primary="Messages"
-              />
-            </Hidden>
-          </ListItem>
           <ListItem
             button
             sx={{
@@ -194,7 +122,7 @@ export default function LeftSidebar() {
             }}
           >
             <ListItemIcon>
-              <ListAltIcon fontSize="medium" color="action" />
+              <FavoriteIcon fontSize="medium" color="action" />
             </ListItemIcon>
             <Hidden lgDown>
               <ListItemText
@@ -202,7 +130,7 @@ export default function LeftSidebar() {
                   fontSize: "18px",
                   color: theme.palette.action.active,
                 }}
-                primary="Lists"
+                primary="Likes"
               />
             </Hidden>
           </ListItem>
@@ -237,18 +165,17 @@ export default function LeftSidebar() {
           </NavLink>
           <ListItem
             id="basic-button"
-            aria-controls="basic-menu"
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
             button
             sx={{
               borderRadius: "28px",
               margin: ".5rem 0",
             }}
+            onClick={() => {
+              dispatch(logout());
+            }}
           >
             <ListItemIcon>
-              <MoreHorizIcon fontSize="medium" color="action" />
+              <LogoutIcon fontSize="medium" color="action" />
             </ListItemIcon>
             <Hidden lgDown>
               <ListItemText
@@ -256,7 +183,7 @@ export default function LeftSidebar() {
                   fontSize: "18px",
                   color: theme.palette.action.active,
                 }}
-                primary="More"
+                primary="Logout"
               />
             </Hidden>
           </ListItem>
@@ -291,31 +218,13 @@ export default function LeftSidebar() {
             <AddCircleOutlineIcon />
           </IconButton>
         </Hidden>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          <MenuItem
-            onClick={() => {
-              dispatch(logout());
-              handleClose();
-            }}
-          >
-            Logout
-          </MenuItem>
-        </Menu>
       </Box>
       {openModal && (
         <Modal
           open={openModal}
           handleClose={handleModalClose}
           saveText={"Post"}
-          len={postText.length}
+          len={postText.trimStart().length}
           handleSave={handleAddPost}
         >
           <Box>
